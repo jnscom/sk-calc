@@ -5,82 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff">
     <title>Rettungsmittel-Berechnung</title>
-    <link rel="manifest" href="manifest.json">
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --red-bg: #ffebeb;
+            --red-border: #ff4444;
+            --yellow-bg: #fff9eb;
+            --yellow-border: #ffd700;
+            --green-bg: #ebffeb;
+            --green-border: #4CAF50;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            padding: 16px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            background-color: #f4f4f4;
         }
+
         .container {
-            text-align: center;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            max-width: 90%;
             width: 100%;
-            box-sizing: border-box;
+            max-width: 500px;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .container h1 {
-            margin-bottom: 20px;
-            font-size: 1.8em;
+
+        h1 {
             color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            text-align: center;
         }
+
         .input-group {
-            margin: 15px 0;
+            margin-bottom: 20px;
         }
-        .input-group label {
+
+        label {
             display: block;
+            font-weight: 600;
             margin-bottom: 8px;
-            font-size: 1em;
-            font-weight: bold;
-            color: #555;
+            color: #444;
         }
-        .input-group select {
+
+        select {
             width: 100%;
             padding: 12px;
-            font-size: 1.2em;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            text-align: center;
+            border-radius: 8px;
+            font-size: 16px;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px top 50%;
+            background-size: 12px auto;
+            cursor: pointer;
         }
+
+        .sk1-select {
+            border: 2px solid var(--red-border);
+            background-color: var(--red-bg);
+        }
+
+        .sk2-select {
+            border: 2px solid var(--yellow-border);
+            background-color: var(--yellow-bg);
+        }
+
+        .sk3-select {
+            border: 2px solid var(--green-border);
+            background-color: var(--green-bg);
+        }
+
         .results {
-            margin-top: 20px;
-            text-align: left;
-            font-size: 1em;
+            margin-top: 32px;
         }
+
         .results h3 {
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 16px;
         }
-        .results .result-item {
+
+        .result-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            background-color: #f9f9f9;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 12px;
         }
-        .results .result-item span {
-            font-weight: bold;
+
+        .result-item span {
+            font-weight: 600;
+            font-size: 1.1rem;
         }
-        .results .result-item.red {
-            background-color: #ffcccc;
-        }
-        .results .result-item.yellow {
-            background-color: #fff8cc;
-        }
-        .results .result-item.green {
-            background-color: #ccffcc;
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px;
+            }
+
+            h1 {
+                font-size: 1.25rem;
+            }
+
+            select {
+                padding: 10px;
+            }
         }
     </style>
 </head>
@@ -90,36 +131,36 @@
 
         <div class="input-group">
             <label for="skI">Anzahl rote Patienten (SK I):</label>
-            <select id="skI" onchange="calculateResources()">
-                ${[...Array(31).keys()].map(i => `<option value="${i * 5}">${i * 5}</option>`).join('')}
+            <select id="skI" class="sk1-select" onchange="calculateResources()">
+                <option value="0">0</option>
             </select>
         </div>
 
         <div class="input-group">
             <label for="skII">Anzahl gelbe Patienten (SK II):</label>
-            <select id="skII" onchange="calculateResources()">
-                ${[...Array(31).keys()].map(i => `<option value="${i * 5}">${i * 5}</option>`).join('')}
+            <select id="skII" class="sk2-select" onchange="calculateResources()">
+                <option value="0">0</option>
             </select>
         </div>
 
         <div class="input-group">
             <label for="skIII">Anzahl grüne Patienten (SK III):</label>
-            <select id="skIII" onchange="calculateResources()">
-                ${[...Array(31).keys()].map(i => `<option value="${i * 5}">${i * 5}</option>`).join('')}
+            <select id="skIII" class="sk3-select" onchange="calculateResources()">
+                <option value="0">0</option>
             </select>
         </div>
 
-        <div class="results" id="results">
+        <div class="results">
             <h3>Ergebnisse:</h3>
-            <div class="result-item red">
+            <div class="result-item">
                 <span>RTWs benötigt:</span>
                 <span id="rtw-result">0</span>
             </div>
-            <div class="result-item yellow">
+            <div class="result-item">
                 <span>KTWs benötigt:</span>
                 <span id="ktw-result">0</span>
             </div>
-            <div class="result-item green">
+            <div class="result-item">
                 <span>NEFs benötigt:</span>
                 <span id="nef-result">0</span>
             </div>
@@ -127,6 +168,28 @@
     </div>
 
     <script>
+        // Populate dropdowns on page load
+        window.onload = function() {
+            const selects = [
+                document.getElementById('skI'),
+                document.getElementById('skII'),
+                document.getElementById('skIII')
+            ];
+
+            selects.forEach(select => {
+                select.innerHTML = ''; // Clear existing options
+                for (let i = 0; i <= 30; i++) {
+                    const value = i * 5;
+                    const option = document.createElement('option');
+                    option.value = value;
+                    option.textContent = value;
+                    select.appendChild(option);
+                }
+            });
+
+            calculateResources(); // Initial calculation
+        };
+
         function calculateResources() {
             const skI = parseInt(document.getElementById('skI').value) || 0;
             const skII = parseInt(document.getElementById('skII').value) || 0;
@@ -138,26 +201,20 @@
                 NEF: 0
             };
 
-            // Berechnung für SK I
+            // Berechnung für SK I (1 RTW + 0.5 NEF pro Patient)
             resources.NEF += skI * 0.5;
             resources.RTW += skI;
 
-            // Berechnung für SK II
+            // Berechnung für SK II (0.5 RTW + 0.5 KTW pro Patient)
             resources.RTW += Math.ceil(skII / 2);
             resources.KTW += skII * 0.5;
 
-            // Berechnung für SK III
+            // Berechnung für SK III (0.25 KTW pro Patient)
             resources.KTW += Math.ceil(skIII / 4);
 
             document.getElementById('rtw-result').textContent = Math.ceil(resources.RTW);
             document.getElementById('ktw-result').textContent = Math.ceil(resources.KTW);
             document.getElementById('nef-result').textContent = Math.ceil(resources.NEF);
-        }
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(() => console.log('Service Worker registriert'))
-                .catch(error => console.error('Service Worker Fehler:', error));
         }
     </script>
 </body>
