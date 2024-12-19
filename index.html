@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>Rettungsmittel-Berechnung</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 700px;
+            width: 100%;
+        }
+        .container h1 {
+            margin-bottom: 30px;
+            font-size: 2em;
+            color: #333;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #555;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .input-group .category {
+            color: white;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .category.sk-i {
+            background-color: #ff4d4d;
+        }
+        .category.sk-ii {
+            background-color: #ffc107;
+        }
+        .category.sk-iii {
+            background-color: #4caf50;
+        }
+        .results {
+            margin-top: 30px;
+            text-align: left;
+            font-size: 1.3em;
+        }
+        .results h3 {
+            color: #333;
+        }
+        .results p {
+            margin: 10px 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rettungsmittel-Berechnung</h1>
+
+        <div class="input-group">
+            <label for="skI">Anzahl rote Patienten (SK I):</label>
+            <input type="number" id="skI" class="category sk-i" min="0" placeholder="Eingabe..." oninput="calculateResources()">
+        </div>
+
+        <div class="input-group">
+            <label for="skII">Anzahl gelbe Patienten (SK II):</label>
+            <input type="number" id="skII" class="category sk-ii" min="0" placeholder="Eingabe..." oninput="calculateResources()">
+        </div>
+
+        <div class="input-group">
+            <label for="skIII">Anzahl grüne Patienten (SK III):</label>
+            <input type="number" id="skIII" class="category sk-iii" min="0" placeholder="Eingabe..." oninput="calculateResources()">
+        </div>
+
+        <div class="results" id="results">
+            <h3>Ergebnisse:</h3>
+            <p><strong>RTWs benötigt:</strong> 0</p>
+            <p><strong>KTWs benötigt:</strong> 0</p>
+            <p><strong>NEFs benötigt:</strong> 0</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateResources() {
+            const skI = parseInt(document.getElementById('skI').value) || 0;
+            const skII = parseInt(document.getElementById('skII').value) || 0;
+            const skIII = parseInt(document.getElementById('skIII').value) || 0;
+
+            const resources = {
+                RTW: 0,
+                KTW: 0,
+                NEF: 0
+            };
+
+            // Berechnung für SK I
+            resources.NEF += skI * 0.5;
+            resources.RTW += skI;
+
+            // Berechnung für SK II
+            resources.RTW += Math.ceil(skII / 2);
+            resources.KTW += skII * 0.5;
+
+            // Berechnung für SK III
+            resources.KTW += Math.ceil(skIII / 4);
+
+            document.getElementById('results').innerHTML = `
+                <h3>Ergebnisse:</h3>
+                <p><strong>RTWs benötigt:</strong> ${Math.ceil(resources.RTW)}</p>
+                <p><strong>KTWs benötigt:</strong> ${Math.ceil(resources.KTW)}</p>
+                <p><strong>NEFs benötigt:</strong> ${Math.ceil(resources.NEF)}</p>
+            `;
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => console.log('Service Worker registriert'))
+                .catch(error => console.error('Service Worker Fehler:', error));
+        }
+    </script>
+</body>
+</html>

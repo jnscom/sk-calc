@@ -1,0 +1,15 @@
+{
+    "short_name": "Rettungsmittel",
+    "name": "Rettungsmittel-Berechnung",
+    "icons": [
+        {
+            "src": "icon.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ],
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff"
+}
