@@ -20,63 +20,66 @@
         }
         .container {
             text-align: center;
-            padding: 40px;
+            padding: 20px;
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            max-width: 700px;
+            max-width: 90%;
             width: 100%;
+            box-sizing: border-box;
         }
         .container h1 {
-            margin-bottom: 30px;
-            font-size: 2em;
+            margin-bottom: 20px;
+            font-size: 1.8em;
             color: #333;
         }
         .input-group {
-            margin: 20px 0;
+            margin: 15px 0;
         }
         .input-group label {
             display: block;
-            margin-bottom: 10px;
-            font-size: 1.2em;
+            margin-bottom: 8px;
+            font-size: 1em;
             font-weight: bold;
             color: #555;
         }
         .input-group input {
             width: 100%;
-            padding: 15px;
-            font-size: 1.5em;
+            padding: 12px;
+            font-size: 1.2em;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
             text-align: center;
         }
-        .input-group .category {
-            color: white;
-            padding: 5px;
-            border-radius: 3px;
+        .input-group input[type="number"]::-webkit-inner-spin-button,
+        .input-group input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
-        .category.sk-i {
-            background-color: #ff4d4d;
-        }
-        .category.sk-ii {
-            background-color: #ffc107;
-        }
-        .category.sk-iii {
-            background-color: #4caf50;
+        .input-group input[type="number"] {
+            -moz-appearance: textfield;
         }
         .results {
-            margin-top: 30px;
+            margin-top: 20px;
             text-align: left;
-            font-size: 1.3em;
+            font-size: 1em;
         }
         .results h3 {
             color: #333;
+            margin-bottom: 10px;
         }
-        .results p {
-            margin: 10px 0;
-            font-size: 1.2em;
-            color: #555;
+        .results .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        .results .result-item span {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -86,24 +89,33 @@
 
         <div class="input-group">
             <label for="skI">Anzahl rote Patienten (SK I):</label>
-            <input type="number" id="skI" class="category sk-i" min="0" placeholder="Eingabe..." oninput="calculateResources()">
+            <input type="number" id="skI" min="0" placeholder="Eingabe..." oninput="calculateResources()">
         </div>
 
         <div class="input-group">
             <label for="skII">Anzahl gelbe Patienten (SK II):</label>
-            <input type="number" id="skII" class="category sk-ii" min="0" placeholder="Eingabe..." oninput="calculateResources()">
+            <input type="number" id="skII" min="0" placeholder="Eingabe..." oninput="calculateResources()">
         </div>
 
         <div class="input-group">
             <label for="skIII">Anzahl grüne Patienten (SK III):</label>
-            <input type="number" id="skIII" class="category sk-iii" min="0" placeholder="Eingabe..." oninput="calculateResources()">
+            <input type="number" id="skIII" min="0" placeholder="Eingabe..." oninput="calculateResources()">
         </div>
 
         <div class="results" id="results">
             <h3>Ergebnisse:</h3>
-            <p><strong>RTWs benötigt:</strong> 0</p>
-            <p><strong>KTWs benötigt:</strong> 0</p>
-            <p><strong>NEFs benötigt:</strong> 0</p>
+            <div class="result-item">
+                <span>RTWs benötigt:</span>
+                <span id="rtw-result">0</span>
+            </div>
+            <div class="result-item">
+                <span>KTWs benötigt:</span>
+                <span id="ktw-result">0</span>
+            </div>
+            <div class="result-item">
+                <span>NEFs benötigt:</span>
+                <span id="nef-result">0</span>
+            </div>
         </div>
     </div>
 
@@ -130,12 +142,9 @@
             // Berechnung für SK III
             resources.KTW += Math.ceil(skIII / 4);
 
-            document.getElementById('results').innerHTML = `
-                <h3>Ergebnisse:</h3>
-                <p><strong>RTWs benötigt:</strong> ${Math.ceil(resources.RTW)}</p>
-                <p><strong>KTWs benötigt:</strong> ${Math.ceil(resources.KTW)}</p>
-                <p><strong>NEFs benötigt:</strong> ${Math.ceil(resources.NEF)}</p>
-            `;
+            document.getElementById('rtw-result').textContent = Math.ceil(resources.RTW);
+            document.getElementById('ktw-result').textContent = Math.ceil(resources.KTW);
+            document.getElementById('nef-result').textContent = Math.ceil(resources.NEF);
         }
 
         if ('serviceWorker' in navigator) {
