@@ -43,7 +43,7 @@
             font-weight: bold;
             color: #555;
         }
-        .input-group input {
+        .input-group select {
             width: 100%;
             padding: 12px;
             font-size: 1.2em;
@@ -51,14 +51,6 @@
             border-radius: 5px;
             box-sizing: border-box;
             text-align: center;
-        }
-        .input-group input[type="number"]::-webkit-inner-spin-button,
-        .input-group input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        .input-group input[type="number"] {
-            -moz-appearance: textfield;
         }
         .results {
             margin-top: 20px;
@@ -81,6 +73,15 @@
         .results .result-item span {
             font-weight: bold;
         }
+        .results .result-item.red {
+            background-color: #ffcccc;
+        }
+        .results .result-item.yellow {
+            background-color: #fff8cc;
+        }
+        .results .result-item.green {
+            background-color: #ccffcc;
+        }
     </style>
 </head>
 <body>
@@ -89,30 +90,36 @@
 
         <div class="input-group">
             <label for="skI">Anzahl rote Patienten (SK I):</label>
-            <input type="number" id="skI" min="0" placeholder="Eingabe..." oninput="calculateResources()">
+            <select id="skI" onchange="calculateResources()">
+                ${[...Array(31).keys()].map(i => `<option value="${i * 5}">${i * 5}</option>`).join('')}
+            </select>
         </div>
 
         <div class="input-group">
             <label for="skII">Anzahl gelbe Patienten (SK II):</label>
-            <input type="number" id="skII" min="0" placeholder="Eingabe..." oninput="calculateResources()">
+            <select id="skII" onchange="calculateResources()">
+                ${[...Array(31).keys()].map(i => `<option value="${i * 5}">${i * 5}</option>`).join('')}
+            </select>
         </div>
 
         <div class="input-group">
             <label for="skIII">Anzahl grüne Patienten (SK III):</label>
-            <input type="number" id="skIII" min="0" placeholder="Eingabe..." oninput="calculateResources()">
+            <select id="skIII" onchange="calculateResources()">
+                ${[...Array(31).keys()].map(i => `<option value="${i * 5}">${i * 5}</option>`).join('')}
+            </select>
         </div>
 
         <div class="results" id="results">
             <h3>Ergebnisse:</h3>
-            <div class="result-item">
+            <div class="result-item red">
                 <span>RTWs benötigt:</span>
                 <span id="rtw-result">0</span>
             </div>
-            <div class="result-item">
+            <div class="result-item yellow">
                 <span>KTWs benötigt:</span>
                 <span id="ktw-result">0</span>
             </div>
-            <div class="result-item">
+            <div class="result-item green">
                 <span>NEFs benötigt:</span>
                 <span id="nef-result">0</span>
             </div>
