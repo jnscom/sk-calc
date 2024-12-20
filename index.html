@@ -29,6 +29,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
         }
 
         .container {
@@ -125,7 +126,11 @@
         }
     </style>
 </head>
+
 <body>
+<div class="container" style="margin-bottom: 16px;">
+    <img src="img.png" alt="Rettungsdienst Logo" style="width: 100%; height: 50%;">
+</div>
     <div class="container">
         <h1>Berechnung RM zur Erstversorgung</h1>
         <h3>Berechnungsgrundlage für 10 Patienten</h3>
@@ -170,7 +175,6 @@
     </div>
 
     <script>
-        // Populate dropdowns on page load
         window.onload = function() {
             const selects = [
                 document.getElementById('skI'),
