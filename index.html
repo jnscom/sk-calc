@@ -127,24 +127,26 @@
 </head>
 <body>
     <div class="container">
-        <h1>Rettungsmittel-Berechnung</h1>
+        <h1>Berechnung RM zur Erstversorgung</h1>
+        <h3>Berechnungsgrundlage für 10 Patienten</h3>
+        <br>
 
         <div class="input-group">
-            <label for="skI">Anzahl rote Patienten (SK I):</label>
+            <label for="skI">Anteil rote Patienten (SK I):</label>
             <select id="skI" class="sk1-select" onchange="calculateResources()">
                 <option value="0">0</option>
             </select>
         </div>
 
         <div class="input-group">
-            <label for="skII">Anzahl gelbe Patienten (SK II):</label>
+            <label for="skII">Anteil gelbe Patienten (SK II):</label>
             <select id="skII" class="sk2-select" onchange="calculateResources()">
                 <option value="0">0</option>
             </select>
         </div>
 
         <div class="input-group">
-            <label for="skIII">Anzahl grüne Patienten (SK III):</label>
+            <label for="skIII">Anteil grüne Patienten (SK III):</label>
             <select id="skIII" class="sk3-select" onchange="calculateResources()">
                 <option value="0">0</option>
             </select>
@@ -157,12 +159,12 @@
                 <span id="rtw-result">0</span>
             </div>
             <div class="result-item">
-                <span>KTWs benötigt:</span>
-                <span id="ktw-result">0</span>
-            </div>
-            <div class="result-item">
                 <span>NEFs benötigt:</span>
                 <span id="nef-result">0</span>
+            </div>
+            <div class="result-item">
+                <span>KTWs benötigt:</span>
+                <span id="ktw-result">0</span>
             </div>
         </div>
     </div>
@@ -177,9 +179,9 @@
             ];
 
             selects.forEach(select => {
-                select.innerHTML = ''; // Clear existing options
-                for (let i = 0; i <= 30; i++) {
-                    const value = i * 5;
+                select.innerHTML = '';
+                for (let i = 0; i <= 10; i++) {
+                    const value = i * 10 + "%";
                     const option = document.createElement('option');
                     option.value = value;
                     option.textContent = value;
@@ -187,7 +189,7 @@
                 }
             });
 
-            calculateResources(); // Initial calculation
+            calculateResources();
         };
 
         function calculateResources() {
@@ -201,16 +203,16 @@
                 NEF: 0
             };
 
-            // Berechnung für SK I (1 RTW + 0.5 NEF pro Patient)
-            resources.NEF += skI * 0.5;
-            resources.RTW += skI;
+            // SK I
+            resources.NEF += skI / 20;
+            resources.RTW += skI / 20;
 
-            // Berechnung für SK II (0.5 RTW + 0.5 KTW pro Patient)
-            resources.RTW += Math.ceil(skII / 2);
-            resources.KTW += skII * 0.5;
+            // SK II
+            resources.RTW += skII / 20;
 
-            // Berechnung für SK III (0.25 KTW pro Patient)
-            resources.KTW += Math.ceil(skIII / 4);
+            // SK III
+            resources.KTW += skIII / 40;
+
 
             document.getElementById('rtw-result').textContent = Math.ceil(resources.RTW);
             document.getElementById('ktw-result').textContent = Math.ceil(resources.KTW);
